@@ -1,4 +1,3 @@
-/* 24. Is BST */
 #include "binary_trees.h"
 #include <limits.h>
 
@@ -8,6 +7,7 @@
  * @prev: pointer to int, passed "by reference" to update during recursion
  * Return: 1 valid if `tree` is valid BST, or 0 if not or `tree` is NULL
  */
+
 int check_if_BST(const binary_tree_t *tree, int *prev)
 {
 	if (tree)
@@ -44,6 +44,7 @@ int check_if_BST(const binary_tree_t *tree, int *prev)
  * @tree: tree to check for BST
  * Return: 1 valid if `tree` is valid BST, or 0 if not or `tree` is NULL
  */
+
 int binary_tree_is_bst(const binary_tree_t *tree)
 {
 	int prev = INT_MIN;
