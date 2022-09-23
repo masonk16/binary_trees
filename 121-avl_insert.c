@@ -10,7 +10,6 @@
  * Return: pointer to new node, or NULL on failure or value found already
  * found in tree
  */
-
 bst_t *bst_insert_recursion(bst_t *tree, int value)
 {
 	bst_t *new = NULL;
@@ -52,7 +51,6 @@ bst_t *bst_insert_recursion(bst_t *tree, int value)
  * Return: pointer to new node, or NULL on failure or value found already
  * found in tree
  */
-
 bst_t *bst_insert(bst_t **tree, int value)
 {
 	bst_t *new = NULL;
