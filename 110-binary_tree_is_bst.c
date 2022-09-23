@@ -1,39 +1,55 @@
+/* 24. Is BST */
 #include "binary_trees.h"
+#include <limits.h>
 
 /**
- * binary_tree_rotate_left - left child of root becomes new root, tree rotated
- * so it retains BST ordering of values (in-order traversal of leaves is same)
- * @tree: tree to left rotate
- * Return: pointer to new root node, or NULL if `root` is NULL
+ * check_if_BST - recursive helper to binary_tree_is_bst
+ * @tree: tree to check for BST
+ * @prev: pointer to int, passed "by reference" to update during recursion
+ * Return: 1 valid if `tree` is valid BST, or 0 if not or `tree` is NULL
  */
-binary_tree_t *binary_tree_rotate_left(binary_tree_t *tree)
+int check_if_BST(const binary_tree_t *tree, int *prev)
 {
-	binary_tree_t *pivot;
+	if (tree)
+	{
+		/*
+		 * in-order traversal: recurse left, test, recurse right
+		 * branching left tests against prev inherited from parent
+		 * while branching right tests against prev = parent->n
+		 */
+		if (!check_if_BST(tree->left, prev))
+			return (0);
+
+		/*
+		 * checks both for repeat values and for left_child < parent
+		 * and right_child > parent
+		 */
+		if (tree->n <= *prev)
+			return (0);
+
+		/* prev updates to current */
+		*prev = tree->n;
+
+		return (check_if_BST(tree->right, prev));
+	}
+	/* recursion has reached an edge of the tree */
+	return (1);
+}
+
+/**
+ * binary_tree_is_bst - uses recursive helper to test is binary tree is binary
+ * search tree: left subtree of each node only has values less than node,
+ * right subtree of each node only has values greater than node, tree is a
+ * BST at each node, and no values appear twice
+ * @tree: tree to check for BST
+ * Return: 1 valid if `tree` is valid BST, or 0 if not or `tree` is NULL
+ */
+int binary_tree_is_bst(const binary_tree_t *tree)
+{
+	int prev = INT_MIN;
 
 	if (!tree)
-		return (NULL);
+		return (0);
 
-	/* pivot will become new root */
-	pivot = tree->right;
-
-	/* migrate children to keep BST order */
-	tree->right = pivot->left;
-	if (pivot->left)
-		pivot->left->parent = tree;
-
-	/* handle upstream connections if `tree` is a subtree */
-	pivot->parent = tree->parent;
-	if (tree->parent)
-	{
-		if (tree == tree->parent->left)
-			tree->parent->left = pivot;
-		else
-			tree->parent->right = pivot;
-	}
-
-	/* finally rotate pivot into root postion */
-	pivot->left = tree;
-	tree->parent = pivot;
-
-	return (pivot);
+	return (check_if_BST(tree, &prev));
 }
