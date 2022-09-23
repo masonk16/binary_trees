@@ -1,39 +1,29 @@
 #include "binary_trees.h"
 
-/**
- * binary_tree_rotate_left - left child of root becomes new root, tree rotated
- * so it retains BST ordering of values (in-order traversal of leaves is same)
- * @tree: tree to left rotate
- * Return: pointer to new root node, or NULL if `root` is NULL
- */
-binary_tree_t *binary_tree_rotate_left(binary_tree_t *tree)
-{
-	binary_tree_t *pivot;
 
+/**
+ * bst_search - recursively searches for a value in a Binary Search Tree
+ *
+ * @tree: pointer to the root node of the BST to search
+ * @value: integer to search for
+ * Return: node containing value, or NULL if not found or root is NULL
+ */
+
+bst_t *bst_search(const bst_t *tree, int value)
+{
 	if (!tree)
 		return (NULL);
 
-	/* pivot will become new root */
-	pivot = tree->right;
+	if (value == tree->n)
+		return ((bst_t *)tree);
 
-	/* migrate children to keep BST order */
-	tree->right = pivot->left;
-	if (pivot->left)
-		pivot->left->parent = tree;
+	/* value not matching and no children left: value not in ordered tree */
+	if (tree->left == NULL && tree->right == NULL)
+		return (NULL);
 
-	/* handle upstream connections if `tree` is a subtree */
-	pivot->parent = tree->parent;
-	if (tree->parent)
-	{
-		if (tree == tree->parent->left)
-			tree->parent->left = pivot;
-		else
-			tree->parent->right = pivot;
-	}
+	if (value < tree->n)
+		return (bst_search(tree->left, value));
 
-	/* finally rotate pivot into root postion */
-	pivot->left = tree;
-	tree->parent = pivot;
-
-	return (pivot);
+	/* value > tree->n */
+	return (bst_search(tree->right, value));
 }
