@@ -34,6 +34,15 @@ typedef struct avl_data_s
 /* mandatory tasks 0-18 + advanced tasks 19-24, 30, 36 */
 typedef struct binary_tree_s binary_tree_t;
 
+/* advanced tasks 25-28 */
+typedef struct binary_tree_s bst_t;
+
+/* advanced tasks 31-34 */
+typedef struct binary_tree_s avl_t;
+
+/* advanced tasks 37-40 */
+typedef struct binary_tree_s heap_t;
+
 /* for output formatted to match project examples */
 void binary_tree_print(const binary_tree_t *);
 
