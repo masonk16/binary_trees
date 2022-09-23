@@ -1,39 +1,48 @@
 #include "binary_trees.h"
 
-/**
- * binary_tree_rotate_left - left child of root becomes new root, tree rotated
- * so it retains BST ordering of values (in-order traversal of leaves is same)
- * @tree: tree to left rotate
- * Return: pointer to new root node, or NULL if `root` is NULL
- */
-binary_tree_t *binary_tree_rotate_left(binary_tree_t *tree)
-{
-	binary_tree_t *pivot;
+size_t heap_tree_size(const binary_tree_t *tree);
 
-	if (!tree)
+/**
+ * heap_to_sorted_array - converts a Binary Max Heap
+ *                        to a sorted array of integers
+ *
+ * @heap: pointer to the root node of the heap to convert
+ * @size: address to store the size of the array
+ *
+ * Return: pointer to array sorted in descending order
+ **/
+int *heap_to_sorted_array(heap_t *heap, size_t *size)
+{
+	int i, *array = NULL;
+
+	if (!heap || !size)
 		return (NULL);
 
-	/* pivot will become new root */
-	pivot = tree->right;
+	*size = heap_tree_size(heap);
+	array = malloc(sizeof(int) * (*size));
+	if (!array)
+		return (NULL);
 
-	/* migrate children to keep BST order */
-	tree->right = pivot->left;
-	if (pivot->left)
-		pivot->left->parent = tree;
+	for (i = 0; heap; i++)
+		array[i] = heap_extract(&heap);
 
-	/* handle upstream connections if `tree` is a subtree */
-	pivot->parent = tree->parent;
-	if (tree->parent)
-	{
-		if (tree == tree->parent->left)
-			tree->parent->left = pivot;
-		else
-			tree->parent->right = pivot;
-	}
+	return (array);
+}
 
-	/* finally rotate pivot into root postion */
-	pivot->left = tree;
-	tree->parent = pivot;
+/**
+ * heap_tree_size - measures the size of a binary tree
+ *
+ * @tree: is a pointer to the root node of the tree to measure the size
+ *
+ * Return: size
+ */
+size_t heap_tree_size(const binary_tree_t *tree)
+{
+	size_t countnode = 0;
 
-	return (pivot);
+	if (!tree)
+		return (0);
+	countnode = 1 + heap_tree_size(tree->right) + heap_tree_size(tree->left);
+
+	return (countnode);
 }
