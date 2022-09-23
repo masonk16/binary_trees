@@ -1,4 +1,3 @@
-/* 22. Rotate right */
 #include "binary_trees.h"
 
 /**
@@ -7,6 +6,7 @@
  * @tree: tree to right rotate
  * Return: pointer to new root node, or NULL if `root` is NULL
  */
+
 binary_tree_t *binary_tree_rotate_right(binary_tree_t *tree)
 {
 	binary_tree_t *pivot;
