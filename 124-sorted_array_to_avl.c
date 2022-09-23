@@ -1,39 +1,40 @@
 #include "binary_trees.h"
-
 /**
- * binary_tree_rotate_left - left child of root becomes new root, tree rotated
- * so it retains BST ordering of values (in-order traversal of leaves is same)
- * @tree: tree to left rotate
- * Return: pointer to new root node, or NULL if `root` is NULL
+ * aux_sort - create the tree using the half element of the array
+ * @parent: parent of the node to create
+ * @array: sorted array
+ * @begin: position where the array starts
+ * @last: position where the array ends
+ * Return: tree created
  */
-binary_tree_t *binary_tree_rotate_left(binary_tree_t *tree)
+avl_t *aux_sort(avl_t *parent, int *array, int begin, int last)
 {
-	binary_tree_t *pivot;
+	avl_t *root;
+	binary_tree_t *aux;
+	int mid = 0;
 
-	if (!tree)
-		return (NULL);
-
-	/* pivot will become new root */
-	pivot = tree->right;
-
-	/* migrate children to keep BST order */
-	tree->right = pivot->left;
-	if (pivot->left)
-		pivot->left->parent = tree;
-
-	/* handle upstream connections if `tree` is a subtree */
-	pivot->parent = tree->parent;
-	if (tree->parent)
+	if (begin <= last)
 	{
-		if (tree == tree->parent->left)
-			tree->parent->left = pivot;
-		else
-			tree->parent->right = pivot;
+		mid = (begin + last) / 2;
+		aux = binary_tree_node((binary_tree_t *)parent, array[mid]);
+		if (aux == NULL)
+			return (NULL);
+		root = (avl_t *)aux;
+		root->left = aux_sort(root, array, begin, mid - 1);
+		root->right = aux_sort(root, array, mid + 1, last);
+		return (root);
 	}
-
-	/* finally rotate pivot into root postion */
-	pivot->left = tree;
-	tree->parent = pivot;
-
-	return (pivot);
+	return (NULL);
+}
+/**
+ * sorted_array_to_avl - create a alv tree from sorted array
+ * @array: sorted array
+ * @size: size of the sorted array
+ * Return: alv tree form sorted array
+ */
+avl_t *sorted_array_to_avl(int *array, size_t size)
+{
+	if (array == NULL || size == 0)
+		return (NULL);
+	return (aux_sort(NULL, array, 0, ((int)(size)) - 1));
 }
