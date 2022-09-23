@@ -1,39 +1,35 @@
 #include "binary_trees.h"
 
-/**
- * binary_tree_rotate_left - left child of root becomes new root, tree rotated
- * so it retains BST ordering of values (in-order traversal of leaves is same)
- * @tree: tree to left rotate
- * Return: pointer to new root node, or NULL if `root` is NULL
- */
-binary_tree_t *binary_tree_rotate_left(binary_tree_t *tree)
-{
-	binary_tree_t *pivot;
 
-	if (!tree)
+/**
+ * array_to_bst - builds a Binary Search Tree from an array
+ *
+ * @array: array of integers, may be unsorted and have repeating values
+ * @size: amount of array members
+ * Return: pointer to head of new BST constructed from array
+ */
+
+bst_t *array_to_bst(int *array, size_t size)
+{
+	bst_t *tree = NULL;
+	size_t i, j;
+
+	if (array == NULL)
 		return (NULL);
 
-	/* pivot will become new root */
-	pivot = tree->right;
-
-	/* migrate children to keep BST order */
-	tree->right = pivot->left;
-	if (pivot->left)
-		pivot->left->parent = tree;
-
-	/* handle upstream connections if `tree` is a subtree */
-	pivot->parent = tree->parent;
-	if (tree->parent)
+	for (i = 0; i < size; i++)
 	{
-		if (tree == tree->parent->left)
-			tree->parent->left = pivot;
-		else
-			tree->parent->right = pivot;
+		/* check if NULL return is for repeat value */
+		if (bst_insert(&tree, array[i]) == NULL)
+		{
+			for (j = 0; j < size && array[j] != array[i]; j++)
+			{}
+
+			/* not a repeating value, bst_insert failure */
+			if (j == i)
+				return (NULL);
+		}
 	}
 
-	/* finally rotate pivot into root postion */
-	pivot->left = tree;
-	tree->parent = pivot;
-
-	return (pivot);
+	return (tree);
 }
