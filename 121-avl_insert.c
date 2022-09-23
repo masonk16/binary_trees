@@ -1,4 +1,8 @@
 #include "binary_trees.h"
+#include "14-binary_tree_balance.c"
+#include "103-binary_tree_rotate_left.c"
+#include "104-binary_tree_rotate_right.c" 
+#include "0-binary_tree_node.c"
 
 
 /**
